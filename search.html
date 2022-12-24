@@ -1,0 +1,78 @@
+<!-- HTML for the search form -->
+<form id="search-form">
+    <input type="text" id="search-query" placeholder="Search for renewable energy resources">
+    <input type="submit" value="Search">
+  </form>
+  
+  <!-- HTML for the search results -->
+  <div id="search-results"></div>
+  
+  <style>
+    /* CSS for styling the search form and results */
+    html{
+      background-color: blue;
+    }
+    #search-form {
+      display: flex;
+      align-items: center;
+    }
+    #search-query {
+      flex-grow: 1;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+    }
+    #search-results h3 {
+      margin: 0;
+    }
+    #search-results p {
+      margin: 0;
+      color: #666;
+    }
+    #search-results a {
+      color: #0070c9;
+    }
+  </style>
+  
+  <script>
+    // Replace YOUR_API_KEY and YOUR_CSE_ID with your own values
+    const apiKey = "AIzaSyAnBgXVZqfMK0IH97HsR88juaKQk9wK5qQ";
+    const cseId = "f11a7abbf6cbe47dc";
+  
+    // Get the search form and results elements
+    const form = document.getElementById("search-form");
+    const results = document.getElementById("search-results");
+  
+    // Add a submit event listener to the form
+    form.addEventListener("submit", event => {
+      // Prevent the form from submitting
+      event.preventDefault();
+  
+      // Get the search query
+      //  const query = document.getElementById("search-query").value;
+      const query = "renewable energy";
+      
+  
+      // Build the CSE URL
+      const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cseId}&q=${query}`;
+  
+      // Send the request and display the results
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          // Clear the previous results
+          results.innerHTML = "";
+  
+          // Display the new results
+          data.items.forEach(item => {
+            const result = document.createElement("div");
+            result.innerHTML = `
+              <h3>${item.title}</h3>
+              <p>${item.snippet}</p>
+              <a href="${item.link}">${item.link}</a>
+            `;
+            results.appendChild(result);
+          });
+        });
+    });
+  </script>
+  
